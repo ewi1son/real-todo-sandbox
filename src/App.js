@@ -1,4 +1,6 @@
 import React from 'react';
+import Header from './Components/Header';
+import ToDo from './Components/todo';
 
 
 class App extends React.Component {
@@ -7,33 +9,29 @@ class App extends React.Component {
     this.state = {
         tasks: [],
         input: "",
+        view: "todo",
+        // checked boolean attr
+        checked: false
     };
   }
   render(){
+    // if else for state management
     return(
       <div className="container text-center mt-4">
-        <h1>To-Do List </h1>
-        {/* display how many items in list */}
-        Tasks Remaining: {this.state.tasks.length}
-        <div>
-          <input onChange={this.handleChange} value={this.state.input} />
-          <button onClick={this.addTask} type="button" className="btn btn-sm btn-outline-primary m-1"> Add Item </button>
-        
-        {/* create unordered list */}
-        <ul>
-        {/* map over each task one at a time, print out a li item = value of task */}
-                        {/* optional i allows acces to index within array */}
-          {this.state.tasks.map((task, i) => 
-              <li key={i}>
-                  {task}
-                      {/* assign data-index to button so it knows which to delete */}
-                  <button data-index={i} onClick={this.deleteTask} type="button" className="btn btn-sm btn-outline-danger m-2">Delete</button>
-              </li>)
-          }
-        </ul>
+      {/* enter props into header for state dispaly change */}
+        <Header />
+        <ToDo 
+          tasks={this.state.tasks}
+          input={this.state.input}
+          checked={this.state.checked}
+          handleChange={this.handleChange}
+          addTask={this.addTask}
+          deleteTask={this.deleteTask}
+        />
+       
      
       </div> 
-      </div>
+      
       
     );
   }
@@ -49,9 +47,42 @@ class App extends React.Component {
     this.setState( state => ({
       // takes original array, adds new input
       tasks: [...state.tasks, state.input],
+      
+      
       // clears out input field when new item added
       input: ""
     }))
+    
+  }
+
+
+  switchModeToDo = () => {
+    this.setState(state => ({
+      // whatever value was of state.editor before, make it the opposite
+      view: "todo"
+    }));
+  }
+
+  switchModeAll = () => {
+    this.setState(state => ({
+      // whatever value was of state.editor before, make it the opposite
+      view: "all"
+    }));
+  }
+
+  switchModeCompleted = () => {
+    this.setState(state => ({
+      // whatever value was of state.editor before, make it the opposite
+      view: "completed"
+    }));
+  }
+
+  taskCompleted = () => {
+    
+    this.setState( state => ({
+      isCompleted: true
+    }))
+    
   }
 
   deleteTask = (event) => {
@@ -68,6 +99,18 @@ class App extends React.Component {
           tasks: tasks
         };
       })
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem('tasks', JSON.stringify(this.state.tasks))
+  }
+  componentDidMount() {
+    if (localStorage.getItem('tasks') != null){
+      var todotasks = JSON.parse(localStorage.getItem('tasks'));
+      this.setState({
+        tasks: todotasks,
+      })
+    }
   }
 }
 

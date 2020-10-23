@@ -12,6 +12,7 @@ class App extends React.Component {
         tasks: [],
         input: "",
         view: "todo",
+        isCompleted: false
         // checked boolean attr
         // checked: false
     };
@@ -21,7 +22,7 @@ class App extends React.Component {
     // if else for state management
     if (this.state.view === "todo"){
     return(
-      <div className="container text-center mt-4">
+      <div className="container text-center mt-4 ">
       {/* enter props into header for state dispaly change */}
         <Header 
           switchModeAll={this.switchModeAll}
@@ -35,12 +36,12 @@ class App extends React.Component {
           handleChange={this.handleChange}
           addTask={this.addTask}
           deleteTask={this.deleteTask}
-          taskCompleted={this.taskCompleted}
+          taskCompleted={this.changeStatus}
         />
       </div> 
     );} else if (this.state.view === "all"){
           return(
-            <div className="container text-center mt-4">
+            <div className="container text-center mt-4 ">
             <Header 
               switchModeAll={this.switchModeAll}
               switchModeCompleted={this.switchModeCompleted}
@@ -48,11 +49,12 @@ class App extends React.Component {
             />
             <All  
               tasks={this.state.tasks}
+
             />
             </div>
       );} else if (this.state.view === "completed"){
         return(
-          <div className="container text-center mt-4">
+          <div className="container text-center mt-4 ">
           <Header 
             switchModeAll={this.switchModeAll}
             switchModeCompleted={this.switchModeCompleted}
@@ -60,6 +62,7 @@ class App extends React.Component {
           />
           <Completed  
             tasks={this.state.tasks}
+            isCompleted={this.state.isCompleted}
           />
           </div>
         )
@@ -77,13 +80,12 @@ class App extends React.Component {
     
     this.setState( state => ({
       // takes original array, adds new input
-      tasks: [...state.tasks, {label: state.input, id: Date.now(), isCompleted: false}],
+      tasks: [...state.tasks, {label: state.input, id: Date.now(), status: "active"}],
       // tasks.push(input)
       
       // clears out input field when new item added
       input: ""
     }))
-    
   }
 
   switchModeToDo = () => {
@@ -110,23 +112,23 @@ class App extends React.Component {
     console.log(this.state.view)
   }
 
-  taskCompleted = (e) => {
-    // like delete task
-    // not splice, 
-    // find index of ID thats being passed to task completed
-    // capture event in task completed
-    // temp array
+  // taskCompleted = (e) => {
+  //   // like delete task
+  //   // not splice, 
+  //   // find index of ID thats being passed to task completed
+  //   // capture event in task completed
+  //   // temp array
 
-    // proxy array
-    // e.target.id
-    // modify temp at index
-    // proxy array
-    // 
-    this.setState( state => ({
-      isCompleted: true
-    }))
-    console.log(this.state.isCompleted)
-  }
+  //   // proxy array
+  //   // e.target.id
+  //   // modify temp at index
+  //   // proxy array
+  //   // 
+  //   this.setState( state => ({
+  //     isCompleted: true
+  //   }))
+  //   console.log(this.state.isCompleted)
+  // }
 
   deleteTask = (event) => {
       const index = event.target.dataset.index;
@@ -146,7 +148,8 @@ class App extends React.Component {
 
   componentDidUpdate() {
     localStorage.setItem('tasks', JSON.stringify(this.state.tasks))
-    console.log(this.state.tasksg)
+    localStorage.setItem('tasks', JSON.stringify(this.state.tasks))
+    console.log(this.state.tasks)
   }
 
   componentDidMount() {
@@ -158,10 +161,20 @@ class App extends React.Component {
     } console.log("Component Did Mount")
   }
 
-  completedDisplay () {
-    return
+  // attempted to update checked
+  changeStatus(id) {
+  
+    //console.log(this.isChecked)
+    console.log(id)
+    // let tempArr = this.state.tasks.map(function(item, index){
+    //   if (item.id === id) {
+    //     item.status = item.status === "active" ? "completed" : "active"
+    //   }
+    //   return item
+    // })
+    // this.setState({tasks: tempArr})
+
   }
- 
 
 
 }

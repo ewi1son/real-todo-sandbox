@@ -6,7 +6,7 @@ class ToDo extends React.Component{
       return(
        //display how many items in list 
        <div>
-       Tasks Remaining: {this.props.tasks.length}
+       <h3>Tasks Remaining: {this.props.tasks.length}</h3>
        <div>
        
         <input onChange={this.props.handleChange} 
@@ -23,16 +23,17 @@ class ToDo extends React.Component{
          </button>
        
        {/* create unordered list */}
-       <ul>
        {/* map over each task one at a time, print out a li item = value of task */}
                        {/* optional i allows acces to index within array */}
+       <ul>
          {this.props.tasks.map((task, i) => 
-             /* was an <li> component */
+             /// was an <li> component 
              <div key={i}>
              <input 
                 type="checkbox" 
                 // defaultChecked={task.isCompleted}
-                onChange={this.props.taskCompleted}
+                // make function
+                onChange={()=>this.props.taskCompleted(task.id)}
                 className="form-check-input" 
                 id= {i}             
              />
@@ -48,7 +49,8 @@ class ToDo extends React.Component{
                     className="btn btn-sm btn-outline-danger m-2"
                  >Delete
                  </button>
-             </div>)
+             </div>
+             )
          }
        </ul>
 
